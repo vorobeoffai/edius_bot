@@ -2,5 +2,5 @@ aiogram
 groq
 python-docx
 PyPDF2
-fpdf
-httpx[socks]
+httpx
+socksio
