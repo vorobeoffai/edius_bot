@@ -4,7 +4,7 @@ import docx
 import re
 import PyPDF2
 import logging
-import httpx
+import httpx  # Библиотека для работы с интернетом и прокси
 from aiogram import Bot, Dispatcher, types, F
 from groq import Groq
 
@@ -13,10 +13,10 @@ API_TOKEN = '8502301153:AAEoqXKhKsB7-RJfhux575jqBtV74dwAUes'
 GROQ_KEY = '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'
 
 # --- 🇺🇸 ТВОЙ SOCKS5 ПРОКСИ ---
-# Используем 'proxy' вместо 'proxies' для совместимости с новыми версиями httpx
+# Данные: логин rP4AjF, пароль Q9TK72, IP 45.145.57.210, порт 11121
 PROXY_URL = "socks5://rP4AjF:Q9TK72@45.145.57.210:11121"
 
-# Настройка логирования
+# Настройка логирования (чтобы видеть в консоли, что происходит)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -24,10 +24,10 @@ logger = logging.getLogger(__name__)
 try:
     logger.info("🔌 Настраиваю соединение через USA Proxy...")
     
-    # Исправлено: параметр 'proxy' (без 's')
+    # ИСПРАВЛЕНО: Используем 'proxy' вместо 'proxies' для совместимости с новой версией httpx
     proxy_client = httpx.Client(proxy=PROXY_URL)
     
-    # Инициализируем Groq через прокси-клиент
+    # Подключаем Groq через этого клиента
     groq_client = Groq(api_key=GROQ_KEY, http_client=proxy_client)
     logger.info(f"✅ Groq успешно настроен через IP 45.145.57.210")
 
@@ -76,7 +76,7 @@ def read_pdf(path):
         logger.error(f"Ошибка чтения PDF: {e}")
         return ""
 
-# --- ЯДРО ОБРАБОТКИ ---
+# --- ЯДРО ОБРАБОТКИ (С ПРОКСИ) ---
 async def run_mega_analysis(message, content, user_name):
     await bot.send_chat_action(message.chat.id, action="typing")
     user_id = message.from_user.id
